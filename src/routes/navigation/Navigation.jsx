@@ -4,6 +4,7 @@ import { Fragment } from 'react'
 import {ReactComponent as Logo } from '../../assets/images/crown.svg'
 import '../navigation/navigation.scss'
 
+
 const Navigation = () => {
   return (
     <Fragment>
@@ -14,6 +15,9 @@ const Navigation = () => {
           <div className='nav-links-container'>
             <Link to='/shop' className='nav-link'>
               Shop
+            </Link>
+            <Link to='/sign-in' className='nav-link'>
+              Sign In
             </Link>
           </div>
         </div>
