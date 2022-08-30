@@ -5,7 +5,8 @@ import {
     signInWithRedirect,
     signInWithPopup,
     GoogleAuthProvider, 
-    createUserWithEmailAndPassword
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword
  } from 'firebase/auth';
 
 import {
@@ -39,15 +40,13 @@ googleProvider.setCustomParameters({
 
 export const auth = getAuth();
 export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider)
-export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider)
+// export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider)
 export const db = getFirestore();
 
 
-export const createUserDocumentFromAuth = async(userAuth) => {
+export const createUserDocumentFromAuth = async(userAuth, additionalInformation={}) => {
     if(!userAuth) return;
     const userDocRef = doc(db, 'users', userAuth.uid);
-    console.log(userDocRef);
-
     const userSnapshot = await getDoc(userDocRef);
     /* First we get a snapshot which is essentially the Document of data
     if it does not exists we create it 
@@ -62,17 +61,28 @@ export const createUserDocumentFromAuth = async(userAuth) => {
             displayName,
             email,
             createdAt,
+            ...additionalInformation,
         });
     }
     catch(error) {
-        console.log('error creating the user', error.message)
-        }
+        console.log('error creating the user', error)
     }
-    console.log(userSnapshot.exists());
 }
+}
+
 // const createUser 
 
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
     if(!email || !password) return;
     return await createUserWithEmailAndPassword(auth,email,password);
+}
+
+
+/*
+    sign in existing user with email and password
+*/
+
+export const signInExistingUserWithEmailAndPassword = async (email, password) => {
+    if(!email || !password) return;
+    return await signInWithEmailAndPassword(auth,email,password);
 }
